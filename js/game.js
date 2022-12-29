@@ -6,6 +6,10 @@ let gridSize
 let opponentShipsPositions = {} // stores positions where we already have ships
 let attackedShips = {} // stores positions that opponent has already attacked
 let gameOver = false
+let timerChoice, timer
+let minutes = 5
+let seconds = 0
+let playerFirstAttack = true
 
 let shipsTemplate = {
     'carrier': {
@@ -39,7 +43,7 @@ let playerShips = JSON.parse(JSON.stringify(shipsTemplate))
 let opponentShips = JSON.parse(JSON.stringify(shipsTemplate))
 const initialValue = 0
 
-/* total number of possibles moves */
+/* Total number of possibles moves */
 const totalMoves = Object.values(shipsTemplate).reduce(
     (accumulator, currentValue) => accumulator + currentValue["length"],
     initialValue)
@@ -47,7 +51,9 @@ const totalMoves = Object.values(shipsTemplate).reduce(
 let playerScore = 0
 let opponentScore = 0
 
-/* creates 2D array */
+/* Creates cells and rows depending on the size to initialize the players board
+** if it's the player, then class player1 is added other it's player2 and the player
+** can't click on the computer's cells yet */
 let initializeGrid = (size, playerBoard, isOpponent) => {
     for(let i=0; i<size; i++){
         let row = $("<tr></tr>")
@@ -55,7 +61,7 @@ let initializeGrid = (size, playerBoard, isOpponent) => {
             let cell = $("<td></td>")
             cell.text("+")
             cell.addClass("game-cell")
-            if(isOpponent == false){
+            if(!isOpponent){
                 cell.addClass("player1")
             }
             else{
@@ -68,7 +74,7 @@ let initializeGrid = (size, playerBoard, isOpponent) => {
     }
 }
 
-/* creates headers for the grid */
+/* Creates vertical and horizontal headers for the given playerboard from 1 to size */
 let createHeaders = (size, playerBoard) => {
     let headerRow = $("<tr></tr>")
     playerBoard.prepend(headerRow)
@@ -83,7 +89,9 @@ let createHeaders = (size, playerBoard) => {
     }
 }
 
-/* updates the grid with the right content */
+/* Updates the table with the right content 
+** loop through the cells that are not headers, if it's the opponent and ships are placed, hide them
+** otherwise show the ships or content */
 let updateGrid = (table, isOpponent) => {
     for(let i=0; i<table.find("tr").length; i++){
         for(let j=0; j<table.find("tr:nth-child(" + (i + 1) + ") td").length; j++){
@@ -98,7 +106,13 @@ let updateGrid = (table, isOpponent) => {
     }
 }
 
-/* user places his ships */
+/* User places his ships by choosing its type and clicking on a cell to place it
+** each ship is represented by an image and when a ship is placed, it's desactivated
+** from the selection so it can't be placed twice 
+** while ships are still available, the user keeps placing them, a ship class is then added 
+to the cell, the number of left ships is displayed to the user and when all ships have been 
+** placed, the player can't click on his cells anymore and he can't click on the opponent's
+cells (=attack) unless all his ships have been placed */
 let clickPlaceShips = () => {
     const playerCells = $(".player1")
     const opponentCells = $(".player2")
@@ -128,18 +142,19 @@ let clickPlaceShips = () => {
     })
 }
 
-/* returns a integer between 1 and max included */
+/* Returns a integer between 1 and max included 
+** used for the opponent to randomly place and attack ships */
 let getRandomCoordinate = (max) => {
     return Math.floor(Math.random()*Math.floor(max))+1
 }
 
-/* randomly places opponent's ships in his grid */
+/* Randomly places opponent's ships in his grid 
+** have an array of all the ship types, while this array is not empty, take a random
+** ship and place it in a random place if this place is not already taken and
+** remove the type of the ship from the array to avoid placing the same ship twice */
 let placeOpponentShips = (char, grid) => {
-    // TRY TO AVOID COPY
-    let counter = 0
     let shipTypes = Object.keys(opponentShips)
-    let shipTypesCopy = shipTypes.slice()
-    while(counter < shipTypesCopy.length){
+    while(shipTypes != 0){
         let shipType = shipTypes[Math.floor(Math.random() * shipTypes.length)]
         let x = getRandomCoordinate(gridSize)
         let y = getRandomCoordinate(gridSize)
@@ -147,13 +162,17 @@ let placeOpponentShips = (char, grid) => {
             $(grid).find("tr").eq(x).find("td").eq(y).text(char)
             $(grid).find("tr").eq(x).find("td").eq(y).addClass("ship " + shipType)
             opponentShipsPositions[`${x}-${y}`] = true
-            shipTypes.splice(shipTypes.indexOf(shipType), 1) // not place the same ship twice
-            counter++
+            shipTypes.splice(shipTypes.indexOf(shipType), 1)
         }
     }
 }   
 
-/* computer's attack */
+/* The computer attacks a random cell in the player's grid if it hasn't already been
+** a miss or sunk. If it's a hit, a hit ship is displayed, a hit class is added and the ship's
+** length is dicreased. Then we check if the ship should be sunk, if so, the proper image is
+** displayed, class sunk is added and scores are updated. If it's a miss, a sign is shown and
+** class miss is added. We then check if the game is over and don't allow click on cells that
+** have missed or sunk ship */
 let opponentAttack = () => {
     let x = getRandomCoordinate(gridSize)
     let y = getRandomCoordinate(gridSize)
@@ -198,7 +217,9 @@ let opponentAttack = () => {
     })
 }
 
-/* player's attack */
+/* The player attacks by clicking on a opponent's cell and as for the computer attack,
+** the content of the cell and classes are added accordingly, scores are updated and
+** check if the game is over is performed */
 let clickAttack = () => {
     let playerScoreText = $(".player1Score").children(".text")
     let hitShips = $(".hitShips").children(".text")
@@ -209,6 +230,11 @@ let clickAttack = () => {
     let sunkShipsNb = 0
     $(".player2").each(function() {
         $(this).click(function() {
+            if(timerChoice === "on" && playerFirstAttack){
+                $(".timer").text("5:00")
+                timer = setInterval(updateTimer, 1000)
+                playerFirstAttack = false
+            }
             if ($(this).hasClass("ship")) {
                 let player2CellType = $(this)[0].classList[3]
                 $(this).addClass("hit")
@@ -222,26 +248,28 @@ let clickAttack = () => {
                     sunkShipsNb++
                     sunkShips.text(sunkShipsNb)
                     $(this).addClass("sunk")
-                    $(this).html('<img src="resources/images/rip.png" alt="ship cartoon" heigth=40 width=40 >')
+                    $(this).html('<img src="resources/images/rip.png" alt="ship cartoon" heigth=40 width=40 >')  
                 }
             } 
             else {
-                $(this).addClass("miss")
-                $(this).text("X")
-                missedShotsNb++
-                missedShots.text(missedShotsNb)
+                    $(this).addClass("miss")
+                    $(this).text("X")
+                    missedShotsNb++
+                    missedShots.text(missedShotsNb)
             }
             $(".player2").each(function() {
                 $(this).css("pointer-events", 'none')
             })
-            checkWin()
-            if(checkWin() === 0 || checkWin() === 1 || checkWin() === 2) return
+            let winResult = checkWin()
+            if(winResult != undefined) return
             opponentAttack()
         })
     })
 }
 
-/* check if ship is sunk */
+/* Takes a ship type and checks if it's the opponent.
+** If it is, the dicrease the length of this specific ship in the opponent's ships
+** otherwise do the same but in the player's ships */
 let isSunk = (shipType, isOpponent) => {
     if(isOpponent){
         return opponentShips[shipType].length === 0
@@ -251,7 +279,8 @@ let isSunk = (shipType, isOpponent) => {
     }
 }
 
-/* check winner */
+/* Checks if game is over by checking if all of the ships have no more lives for 
+** each player or if no more moves are available on the boards */
 let checkWin = () => {
     let message = $(".message")
     if(!gameOver){
@@ -273,21 +302,26 @@ let checkWin = () => {
     }
 }
 
-/* play again button */
-let playAgain = () => {
-    $(".playAgainBtn").click(function(event){
+/* set a 5min timer for the game if the player wants to */
+let updateTimer = () => {
+    seconds -= 1
+    // Reset the seconds to 59 when they reach 0
+    if (seconds < 0) {
+        minutes -= 1
+        seconds = 59
+    }
+    let timerText = `${minutes}:${seconds.toString().padStart(2, "0")}`
+    $(".timer").text(timerText)
+
+    // If the timer has reached 0, stop the timer
+    if (minutes === 0 && seconds === 0) {
+        clearInterval(timer)
+        alert("GAME OVER SORRY !")
         location.reload()
-    })
+    }
 }
 
-/* quit button */
-let quit = () => {
-    $(".quitBtn").click(function(event){
-        window.close()
-    })
-}
-
-/* get data from modal */
+/* Gets the user input data from the modal in order to accordingly setup the game */
 let getUserInfo = () => {
     let form = document.querySelector('#userData')
     $("#submitBtn").click(function(event) {
@@ -295,6 +329,7 @@ let getUserInfo = () => {
         let formData = new FormData(form)
         let name = formData.get('name')
         let size = formData.get('size')
+        timerChoice = formData.get('timerChoice')
         size = parseInt(size)
         if(size<5 || size >10){
             alert("Please enter a size between 5 and 10 !")
@@ -308,8 +343,16 @@ let getUserInfo = () => {
     })
 }
 
-/* game setup */
+/* Set ups the game using the information and prepare the events for the play again and quit button */
 let setupGame = () => {
+        /* play again button */
+        $(".playAgainBtn").click(function(event){
+            location.reload()
+        })
+        /* quit button */
+        $(".quitBtn").click(function(event){
+            window.close()
+        })
         gridSize = $("#size").text()
         initializeGrid(gridSize, player1GameBoard, false)
         initializeGrid(gridSize, player2GameBoard, true)
@@ -318,13 +361,11 @@ let setupGame = () => {
         clickPlaceShips()
         placeOpponentShips('S', player2GameBoard)
         updateGrid(player2GameBoard, true)
-        updateGrid(player1GameBoard, false) 
+        updateGrid(player1GameBoard, false)
         clickAttack()
 }
 
 getUserInfo()
-playAgain()
-quit()
 
 
 

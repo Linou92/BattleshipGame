@@ -34,13 +34,8 @@
         <option value="submarine">Submarine</option>
         <option value="destroyer">Destroyer</option>
       </select>
-      <div class="option">
-        <p>Do you want to see when the ships are hit or missed?</p>
-        <input type="radio" id="yes" name="yes" value="yes">
-        <label for="yes">Yes</label>
-        <input type="radio" id="no" name="no" value="no">
-        <label for="no">No</label>
-      </div> 
+      <div class="timer">
+      </div>
       <!-- Players boards -->
       <section class="board">
         <section class="displays">
@@ -70,14 +65,14 @@
           <span class='player2Score'>Computer's score: 
             <p class="text">0</p>
           </span>
-          <span class='hitShips'>Hit ships (you/computer): 
-            <p class="text">0 / 0</p>
+          <span class='hitShips'>Number of ships you hit: 
+            <p class="text">0</p>
           </span>
-          <span class='missedShips'>Missed shots (you/computer): 
-            <p class="text">0 / 0</p>
+          <span class='missedShips'>Your missed shots: 
+            <p class="text">0</p>
           </span>
-          <span class='sunkShips'>Sunk ships (you/computer): 
-            <p class="text">0 / 0</p>
+          <span class='sunkShips'>Number of ships you sunk: 
+            <p class="text">0</p>
           </span>
           <span class="shipsNb">Ships left to place: 
             <p class="text">5</p>
@@ -103,6 +98,11 @@
                       Please type in the desired size for both grids (between 5 and 10)
                   </label>
                   <input type="number" id="size" name="size" min="5" max="10" required>
+                  <div class="option">
+                    <p>Do you want a more exciting game? Add a timer!</p>
+                    <input type="checkbox" id="timerChoice" name="timerChoice">
+                    <label for="choice">Yes I want one.</label> 
+                  </div>
                 </form> 
               </div>
               <div class="modal-footer">

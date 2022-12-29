@@ -88,6 +88,13 @@ caption {
 	font-size: 30px;
 }*/
 
+.timer {
+	color: rgb(221, 0, 0);
+	text-align: center;
+	justify-content: center;
+	font-weight: bold;
+}
+
 .header-cell {
     font-size: 15px;
     font-weight: bold;
@@ -201,7 +208,7 @@ caption {
 	font-weight: bold;
 }
 
-@keyframes expand {
+/*@keyframes expand {
 	0% {
 		width: 0px;
 		height: 0px;
@@ -262,4 +269,4 @@ caption {
 		top: 5px;
 		left: 5px;
 	}
-}
+}*/
