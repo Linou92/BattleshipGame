@@ -282,21 +282,26 @@ let isSunk = (shipType, isOpponent) => {
 /* Checks if game is over by checking if all of the ships have no more lives for 
 ** each player or if no more moves are available on the boards */
 let checkWin = () => {
-    let message = $(".message")
     if(!gameOver){
         if(Object.values(playerShips).every(ship => ship.length === 0)){
             gameOver = true
-            message.text("Sorry, you lost. Better luck next time !")
+            $("#modalContainerLost").modal('show')
+            let lost = new Audio('resources/audio//lost.mp3')
+            lost.play()
             return 0
         }
         else if(Object.values(opponentShips).every(ship => ship.length === 0)){
             gameOver = true
-            message.text("Congrats you won !")
+            $("#modalContainerWin").modal('show')
+            let won = new Audio('resources/audio//won.mp3')
+            won.play()
             return 1
         }
         else if(attackedShips.length === Math.pow(gridSize, 2)+totalMoves){
             gameOver = true
-            message.text("No more available moves !")
+            $("#modalContainerTie").modal('show')
+            let lost = new Audio('resources/audio//lost.mp3')
+            lost.play()
             return 2
         }
     }
@@ -316,7 +321,9 @@ let updateTimer = () => {
     // If the timer has reached 0, stop the timer
     if (minutes === 0 && seconds === 0) {
         clearInterval(timer)
-        alert("GAME OVER SORRY !")
+        $("#modalContainerGameOver").modal('show')
+        let lost = new Audio('resources/audio//lost.mp3')
+        lost.play()
         location.reload()
     }
 }
@@ -351,7 +358,9 @@ let setupGame = () => {
         })
         /* quit button */
         $(".quitBtn").click(function(event){
-            window.close()
+            $("#modalContainerBye").modal('show')
+            let bye = new Audio('resources/audio//bye.mp3')
+            bye.play()
         })
         gridSize = $("#size").text()
         initializeGrid(gridSize, player1GameBoard, false)

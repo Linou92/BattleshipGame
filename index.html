@@ -16,16 +16,21 @@
 </head>
 
 <body>
-  <!-- Header of the page -->
+    <!-- Header of the page -->
     <nav class="navbar navbar-expand-lg navbar-light">
       <a class="navbar-brand" href="#">
         <h1>Welcome to the Battleship Game !</h1>
         <img src="resources/images/boat.png" alt="black and white ship" class="logo">
       </a>
     </nav>
-    <!-- Main container -->
-    <main id="main">
-      <!-- Add a dropdown menu for selecting the type of ship to place & option choice -->
+    <div class="options">
+      <p>How to play?</p>
+      <ol class="instructions">
+        <li id="step1">Select your ships from the dropdown menu</li>
+        <li id="step2">Place all your ships on your grid by clicking on a cell</li>
+        <li id="step3">Click on the cells of the enemy's grid to find and destroy all five enemy ships</li>
+        <li id="step4">The computer will fire on your ships immediately after you fire on its ships.</li>
+      </ol><br>
       <label for="ship-type-select">Select a ship type:</label>
       <select id="ship-type-select">
         <option value="carrier">Carrier</option>
@@ -34,19 +39,18 @@
         <option value="submarine">Submarine</option>
         <option value="destroyer">Destroyer</option>
       </select>
-      <div class="timer">
+      <div class="timer"></div>
+    </div>
+    <!-- Players' grid -->
+    <main id="main">
+      <div class="field-container">
+        <h1 class="title">Computer's board</h1>
+        <table class="field fieldEnemy" id="player2-game-board"></table>
       </div>
-      <!-- Players boards -->
-      <section class="board">
-        <section class="displays">
-          <table class="topTable" id="player1-game-board">
-            <caption id="player1"></caption>
-          </table>
-          <table class="bottomTable" id="player2-game-board">
-            <caption> Computer's Board </caption>
-          </table>
-        </section>
-      </section>
+      <div class="field-container">
+          <h1 class="title" id="player1"></h1>
+          <table class="field fieldMe" id="player1-game-board"></table>
+      </div>
       <!-- Top panel on the right side of the page -->
       <section class="panel">
         <section class="topPanel">
@@ -80,8 +84,14 @@
           </span>
         </section>
     </main>
-    <!-- Modal to setup the game -->
-    <section id="myModal" class="modal fade" tabindex="-1">
+   
+    <!-- Footer of the page -->
+    <footer class="footer">
+      Copyright &copy; Softwerk AB 2022. Designed by Lina Abu Hijleh.
+    </footer>
+
+     <!-- Modal to setup the game -->
+     <section id="myModal" class="modal fade" tabindex="-1">
       <div class="modal-dialog">
           <div class="modal-content">
               <div class="modal-header">
@@ -112,11 +122,76 @@
           </div>
       </div>
     </section>
-    <!-- Footer of the page -->
-    <footer class="footer">
-      Copyright &copy; Softwerk AB 2022. Designed by Lina Abu Hijleh.
-    </footer>
-
+    <!-- Win modal -->
+    <section id="modalContainerWin" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-body">
+                <h1 class=".modalTitle"> Congrats you won ! &#129321; </h1>
+                <p> Good job. </p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+    </section>
+    <!-- Lost modal -->
+    <section id="modalContainerLost" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-body">
+                <h1 class=".modalTitle"> Sorry you lost ! &#128577; </h1>
+                <p> Better luck next time! </p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+    </section>
+    <!-- Tie modal -->
+    <section id="modalContainerTie" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-body">
+                <h1 class=".modalTitle"> Sorry you lost ! &#128577; </h1>
+                <p> Better luck next time! </p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+    </section>
+    <!-- Game over modal -->
+    <section id="modalContainerGameOver" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-body">
+                <h1 class=".modalTitle"> Game Over ! &#128577; </h1>
+                <p> Try again! </p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+    </section>
+    <!-- Quit modal -->
+    <section id="modalContainerBye" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-body">
+                <h1 class=".modalTitle"> See you ! &#128075; </h1>
+                <p> Thanks for playing with us ! We hope to see you back again soon. </p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+    </section>
     <!-- scripts -->
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
