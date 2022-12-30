@@ -25,7 +25,9 @@ https://linou92.github.io/BattleshipGame/
    - initFctTests.js tests some basic functions 
    - gameTests.js tests some functions related to the logic of the game
    - qunits.html shows the results of the tests
-- Screenshots contains all the images displayed above of the game in use 
+- Screenshots contains all the images displayed above of the game in use
+- index.html contains the UI of the game
+- information.pdf contains improvements and explanations about the code and game
 
 ## Used technologies
 
@@ -50,7 +52,14 @@ https://linou92.github.io/BattleshipGame/
 - You need to sink all your opponent's ships in order to win
 - You can see where your ships are placed but you can't see your opponent's ships placement until you hit them
 
+## Features
 
+- 5 min timer
+- player chooses the size of the boards (between 5 and 10)
+- sound effect when player wins, looses and quit the game
+- play again button
+- quit button
+- scoreboard
 
 ## How to run the program
 
