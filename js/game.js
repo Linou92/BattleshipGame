@@ -326,7 +326,6 @@ let updateTimer = () => {
         $("#modalContainerGameOver").modal('show')
         let lost = new Audio('resources/audio/lost.mp3')
         lost.play()
-        //location.reload()
     }
 }
 
@@ -360,6 +359,7 @@ let setupGame = () => {
         })
         /* quit button */
         $(".quitBtn").click(function(event){
+            if(timerChoice === "on") clearInterval(timer)
             $("#modalContainerBye").modal('show')
             let bye = new Audio('resources/audio/bye.mp3')
             bye.play()
