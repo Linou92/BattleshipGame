@@ -3,13 +3,16 @@ const player1GameBoard = $("#player1-game-board")
 const player2GameBoard = $("#player2-game-board")
 let isOpponent = false
 let gridSize
-let opponentShipsPositions = {} // stores positions where we already have ships
+let opponentShipsPositions = {} // stores positions where we already have ships for the opponent
+let playerShipsPositions = {} // stores positions where we already have ships for the player
 let attackedShips = {} // stores positions that opponent has already attacked
 let gameOver = false
 let timerChoice, timer
 let minutes = 5
 let seconds = 0
 let playerFirstAttack = true
+let playerScore = 0
+let opponentScore = 0
 
 let shipsTemplate = {
     'carrier': {
@@ -47,9 +50,6 @@ const initialValue = 0
 const totalMoves = Object.values(shipsTemplate).reduce(
     (accumulator, currentValue) => accumulator + currentValue["length"],
     initialValue)
-
-let playerScore = 0
-let opponentScore = 0
 
 /* Creates cells and rows depending on the size to initialize the players board
 ** if it's the player, then class player1 is added other it's player2 and the player
@@ -96,10 +96,10 @@ let updateGrid = (table, isOpponent) => {
     for(let i=0; i<table.find("tr").length; i++){
         for(let j=0; j<table.find("tr:nth-child(" + (i + 1) + ") td").length; j++){
             let cell = table.find("tr:nth-child(" + (i + 1) + ") td:nth-child(" + (j + 1) + ")")
-            if (isOpponent && cell.text() == "S") {
+            if(isOpponent && cell.text() == "S"){
                 cell.text("+")
             } 
-            else {
+            else{
                 cell.text(cell.text())
             }
         }
@@ -119,7 +119,7 @@ let clickPlaceShips = () => {
     let clickCounter = 1
     let shipsNb = $(".shipsNb")
     playerCells.click(function() {
-        if (clickCounter <= Object.keys(playerShips).length) {
+        if(clickCounter <= Object.keys(playerShips).length){
             let shipType = $("#ship-type-select").val()
             if(shipType === null){
                 alert("Please select a ship type before placing a ship.")
@@ -135,7 +135,7 @@ let clickPlaceShips = () => {
             shipsNb.children(".text").text(remainingShips + " out of " + Object.keys(playerShips).length)
             if((clickCounter-1) === Object.keys(playerShips).length) opponentCells.css("pointer-events", "auto")
         } 
-        else {
+        else{
             $(this).css("pointer-events", "none")
             shipsNb.children(".text").text("You don't have any more ships to place !")
         }
@@ -180,7 +180,7 @@ let opponentAttack = () => {
     let player1Cell = $(player1GameBoard).find("tr").eq(x).find("td").eq(y)
     let opponentTotalScore = $(".player2Score").children(".text")
     // Keep generating new coordinates until we find a position that has not been missed or sunk 
-    while (attackedShips[`${x}-${y}`] && (player1Cell.hasClass("miss") || player1Cell.hasClass("sunk"))){
+    while(attackedShips[`${x}-${y}`] && (player1Cell.hasClass("miss") || player1Cell.hasClass("sunk"))){
         x = getRandomCoordinate(gridSize)
         y = getRandomCoordinate(gridSize)
         player1Cell = $(player1GameBoard).find("tr").eq(x).find("td").eq(y)
@@ -228,14 +228,14 @@ let clickAttack = () => {
     let missedShotsNb = 0
     let sunkShips = $(".sunkShips").children(".text")
     let sunkShipsNb = 0
-    $(".player2").each(function() {
-        $(this).click(function() {
+    $(".player2").each(function(){
+        $(this).click(function(){
             if(timerChoice === "on" && playerFirstAttack){
                 $(".timer").text("5:00")
                 timer = setInterval(updateTimer, 1000)
                 playerFirstAttack = false
             }
-            if ($(this).hasClass("ship")) {
+            if($(this).hasClass("ship")){
                 let player2CellType = $(this)[0].classList[3]
                 $(this).addClass("hit")
                 $(this).html('<img src="resources/images/brokenShip.png" alt="ship cartoon" heigth=40 width=40>')
@@ -251,13 +251,13 @@ let clickAttack = () => {
                     $(this).html('<img src="resources/images/rip.png" alt="ship cartoon" heigth=40 width=40 >')  
                 }
             } 
-            else {
-                    $(this).addClass("miss")
-                    $(this).text("X")
-                    missedShotsNb++
-                    missedShots.text(missedShotsNb)
+            else{
+                $(this).addClass("miss")
+                $(this).text("X")
+                missedShotsNb++
+                missedShots.text(missedShotsNb)
             }
-            $(".player2").each(function() {
+            $(".player2").each(function(){
                 $(this).css("pointer-events", 'none')
             })
             let winResult = checkWin()
@@ -284,23 +284,26 @@ let isSunk = (shipType, isOpponent) => {
 let checkWin = () => {
     if(!gameOver){
         if(Object.values(playerShips).every(ship => ship.length === 0)){
+            if(timerChoice === "on") clearInterval(timer)
             gameOver = true
             $("#modalContainerLost").modal('show')
-            let lost = new Audio('resources/audio//lost.mp3')
+            let lost = new Audio('resources/audio/lost.mp3')
             lost.play()
             return 0
         }
         else if(Object.values(opponentShips).every(ship => ship.length === 0)){
+            if(timerChoice === "on") clearInterval(timer)
             gameOver = true
             $("#modalContainerWin").modal('show')
-            let won = new Audio('resources/audio//won.mp3')
+            let won = new Audio('resources/audio/won.mp3')
             won.play()
             return 1
         }
         else if(attackedShips.length === Math.pow(gridSize, 2)+totalMoves){
+            if(timerChoice === "on") clearInterval(timer)
             gameOver = true
             $("#modalContainerTie").modal('show')
-            let lost = new Audio('resources/audio//lost.mp3')
+            let lost = new Audio('resources/audio/lost.mp3')
             lost.play()
             return 2
         }
@@ -311,27 +314,26 @@ let checkWin = () => {
 let updateTimer = () => {
     seconds -= 1
     // Reset the seconds to 59 when they reach 0
-    if (seconds < 0) {
+    if(seconds < 0){
         minutes -= 1
         seconds = 59
     }
     let timerText = `${minutes}:${seconds.toString().padStart(2, "0")}`
     $(".timer").text(timerText)
-
     // If the timer has reached 0, stop the timer
-    if (minutes === 0 && seconds === 0) {
+    if(minutes === 0 && seconds === 0){
         clearInterval(timer)
         $("#modalContainerGameOver").modal('show')
-        let lost = new Audio('resources/audio//lost.mp3')
+        let lost = new Audio('resources/audio/lost.mp3')
         lost.play()
-        location.reload()
+        //location.reload()
     }
 }
 
 /* Gets the user input data from the modal in order to accordingly setup the game */
 let getUserInfo = () => {
     let form = document.querySelector('#userData')
-    $("#submitBtn").click(function(event) {
+    $("#submitBtn").click(function(event){
         event.preventDefault()
         let formData = new FormData(form)
         let name = formData.get('name')
@@ -359,7 +361,7 @@ let setupGame = () => {
         /* quit button */
         $(".quitBtn").click(function(event){
             $("#modalContainerBye").modal('show')
-            let bye = new Audio('resources/audio//bye.mp3')
+            let bye = new Audio('resources/audio/bye.mp3')
             bye.play()
         })
         gridSize = $("#size").text()

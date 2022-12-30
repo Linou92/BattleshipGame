@@ -1,3 +1,4 @@
+/********** general styling **********/
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,700);
 
 * {
@@ -12,6 +13,7 @@ body {
     background-size: cover;
 }
 
+/********** header styling **********/
 .navbar {
     text-align: center;
     justify-content: center;
@@ -29,12 +31,6 @@ h1 {
     color: #515A5A;
 }
 
-/*#main {
-	width: 800px;
-	height: fit-content;
-	margin: auto;
-}*/
-
 .instructions {
 	width: auto;
 	display: inline-block;
@@ -42,6 +38,21 @@ h1 {
 	margin: 0 auto 3em auto;
 }
 
+.options {
+	text-align: center;
+	justify-content: center;
+	
+}
+
+.timer {
+	color: rgb(221, 0, 0);
+	text-align: center;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 30px;
+}
+
+/********** main container styling **********/
 #main {
     position: relative;
     margin: auto;
@@ -49,6 +60,7 @@ h1 {
     justify-content: center;
 }
 
+/***** boards *****/
 .field-container {
     position: relative;
 	border: 2px solid #73B1B7;
@@ -74,45 +86,6 @@ h1 {
     height: 400px;
 }
 
-/*.board {
-	position: absolute;
-	width: 450px; 
-	height: fit-content;
-	margin: 25px auto;
-	border: 2px solid #73B1B7;
-	border-radius: 10px;*/
-	/*border: 2px solid #73B1B7;
-	border-radius: 10px;
-	margin-top: 53px;
-	position: absolute;
-	width: auto; 
-	height: auto;*/
-/*}
-
-.displays {
-	position: relative;
-	margin: 25px;
-	width: 450px; 
-	height: fit-content;
-	/*position: relative;
-	margin: 25px;
-	width: 100%; 
-	height: 100%;*/
-/*}
-
-caption {
-    font-size: 20px;
-    text-align: center;
-}
-
-.topTable, .bottomTable {
-	width: 400px;
-	height: 400px;
-	/*width: 100%;
-	height: 100%;
-	display: block;*/
-/*}*/
-
 .game-cell, .header-cell {
     text-align: center;
     border: 1px solid white;
@@ -120,24 +93,6 @@ caption {
     color: white;
 	width: 60px;
 	height: 60px;
-}
-
-/*.game-cell {
-	font-size: 30px;
-}*/
-
-.options {
-	text-align: center;
-	justify-content: center;
-	
-}
-
-.timer {
-	color: rgb(221, 0, 0);
-	text-align: center;
-	justify-content: center;
-	font-weight: bold;
-	font-size: 30px;
 }
 
 .header-cell {
@@ -149,6 +104,7 @@ caption {
 	color: gray;
 }
 
+/***** top and bottom panel *****/
 .panel {
 	float: right;
 	width: 275px;
@@ -185,14 +141,6 @@ caption {
 	background: rgba(169,169,169,0.3);
 }
 
-.message {
-	color: rgb(221, 0, 0);
-	text-align: center;
-	justify-content: center;
-	font-weight: bold;
-	font-size: 20px;
-}
-
 .img {
     width: 100px;
     height: 100px;
@@ -227,11 +175,28 @@ caption {
 	font-style: italic;
 }
 
+/***** footer *****/
 .footer {
     text-align: center;
     justify-content: center;
     background-color: #73b1b7ac;
     color: #3c3e3e;
+}
+
+/***** go up button *****/
+a.top {
+	margin-left: 20px;
+	margin-top: 950px;
+	margin-bottom: 50px;
+    padding: 10px 10px;
+    position: sticky;
+    bottom: 24px;
+    border: 1px dashed;
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: sans-serif;
+    color: #fff;
+    background: #3c3e3e;
 }
 
 /********** Styling the modals popups **********/
@@ -254,67 +219,3 @@ caption {
 	justify-content: center;
 	font-weight: bold;
 }
-
-
-/*@keyframes expand {
-	0% {
-		width: 0px;
-		height: 0px;
-		top: 12.5px;
-		left: 12.5px;
-	}
-	50% {
-		width: 25px;
-		height: 25px;
-		top: 0px;
-		left: 0px;
-	}
-	100% {
-		width: 15px;
-		height: 15px;
-		top: 5px;
-		left: 5px;
-	}
-}
-
-@-webkit-keyframes expand {
-	0% {
-		width: 0px;
-		height: 0px;
-		top: 12.5px;
-		left: 12.5px;
-	}
-	50% {
-		width: 25px;
-		height: 25px;
-		top: 0px;
-		left: 0px;
-	}
-	100% {
-		width: 15px;
-		height: 15px;
-		top: 5px;
-		left: 5px;
-	}
-}
-
-@-moz-keyframes expand {
-	0% {
-		width: 0px;
-		height: 0px;
-		top: 12.5px;
-		left: 12.5px;
-	}
-	50% {
-		width: 25px;
-		height: 25px;
-		top: 0px;
-		left: 0px;
-	}
-	100% {
-		width: 15px;
-		height: 15px;
-		top: 5px;
-		left: 5px;
-	}
-}*/

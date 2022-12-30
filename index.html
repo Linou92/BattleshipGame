@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,10 +13,10 @@
     <script src="js/popupForm.js" defer></script>
     <script src="js/game.js" defer></script>
     <title>BattleShip Game</title>
-</head>
+  </head>
 
-<body>
-    <!-- Header of the page -->
+  <body>
+    <!-- Header of the page: title, logo, instructions, selection of ships and timer-->
     <nav class="navbar navbar-expand-lg navbar-light">
       <a class="navbar-brand" href="#">
         <h1>Welcome to the Battleship Game !</h1>
@@ -41,15 +41,16 @@
       </select>
       <div class="timer"></div>
     </div>
-    <!-- Players' grid -->
+    <!-- Main container -->
     <main id="main">
+      <!-- Players' grid -->
       <div class="field-container">
         <h1 class="title">Computer's board</h1>
         <table class="field fieldEnemy" id="player2-game-board"></table>
       </div>
       <div class="field-container">
-          <h1 class="title" id="player1"></h1>
-          <table class="field fieldMe" id="player1-game-board"></table>
+        <h1 class="title" id="player1">Player's board</h1>
+        <table class="field fieldMe" id="player1-game-board"></table>
       </div>
       <!-- Top panel on the right side of the page -->
       <section class="panel">
@@ -58,7 +59,6 @@
             <div class='buttons playAgainBtn'>Play Again</div>
             <div class='buttons quitBtn'>Quit</div>     
             <img src="resources/images/anchor.png" alt="black and white anchor" class="img">
-            <p class="message"></p>
           </div>
         </section>
         <!-- Bottom panel on the right side of the page -->
@@ -83,117 +83,118 @@
             <p id="size"hidden></p>
           </span>
         </section>
+      </section>
+      <a href="#" class="top">Go up &#8593;</a>
     </main>
-   
     <!-- Footer of the page -->
     <footer class="footer">
       Copyright &copy; Softwerk AB 2022. Designed by Lina Abu Hijleh.
     </footer>
 
-     <!-- Modal to setup the game -->
-     <section id="myModal" class="modal fade" tabindex="-1">
+    <!-- Modal to setup the game -->
+    <section id="myModal" class="modal fade" tabindex="-1">
       <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <p class="modal-title">Fill the needed information in order to start the game.</p>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <div class="modal-body">
-                <form id="userData" method="post" action="#">
-                  <label class="formLabel" for="name">
-                      What's your name?
-                  </label>
-                  <input type="text" id="name" name="name" required>
-                  <label class="formLabel" for="size">
-                      Please type in the desired size for both grids (between 5 and 10)
-                  </label>
-                  <input type="number" id="size" name="size" min="5" max="10" required>
-                  <div class="option">
-                    <p>Do you want a more exciting game? Add a timer!</p>
-                    <input type="checkbox" id="timerChoice" name="timerChoice">
-                    <label for="choice">Yes I want one.</label> 
-                  </div>
-                </form> 
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" id="submitBtn">Play</button>
-              </div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <p class="modal-title">Fill the needed information in order to start the game.</p>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
+          <div class="modal-body">
+            <form id="userData" method="post" action="#">
+              <label class="formLabel" for="name">
+                What's your name?
+              </label>
+              <input type="text" id="name" name="name" required>
+              <label class="formLabel" for="size">
+                Please type in the desired size for both grids (between 5 and 10)
+              </label>
+              <input type="number" id="size" name="size" min="5" max="10" required>
+              <div class="option">
+                <p>Do you want a more exciting game? Add a timer!</p>
+                <input type="checkbox" id="timerChoice" name="timerChoice">
+                <label for="choice">Yes I want more challenge.</label> 
+              </div>
+            </form> 
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="submitBtn">Play</button>
+          </div>
+        </div>
       </div>
     </section>
     <!-- Win modal -->
     <section id="modalContainerWin" class="modal fade" tabindex="-1">
       <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-body">
-                <h1 class=".modalTitle"> Congrats you won ! &#129321; </h1>
-                <p> Good job. </p>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <h1 class=".modalTitle"> Congrats you won ! &#129321; </h1>
+            <p> Good job. </p>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </section>
     <!-- Lost modal -->
     <section id="modalContainerLost" class="modal fade" tabindex="-1">
       <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-body">
-                <h1 class=".modalTitle"> Sorry you lost ! &#128577; </h1>
-                <p> Better luck next time! </p>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <h1 class=".modalTitle"> Sorry you lost ! &#128577; </h1>
+            <p> Better luck next time! </p>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </section>
     <!-- Tie modal -->
     <section id="modalContainerTie" class="modal fade" tabindex="-1">
       <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-body">
-                <h1 class=".modalTitle"> Sorry you lost ! &#128577; </h1>
-                <p> Better luck next time! </p>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <h1 class=".modalTitle"> Sorry you lost ! &#128577; </h1>
+            <p> Better luck next time! </p>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </section>
     <!-- Game over modal -->
     <section id="modalContainerGameOver" class="modal fade" tabindex="-1">
       <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-body">
-                <h1 class=".modalTitle"> Game Over ! &#128577; </h1>
-                <p> Try again! </p>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <h1 class=".modalTitle"> Game Over ! &#128577; </h1>
+            <p> Try again! </p>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </section>
     <!-- Quit modal -->
     <section id="modalContainerBye" class="modal fade" tabindex="-1">
       <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-body">
-                <h1 class=".modalTitle"> See you ! &#128075; </h1>
-                <p> Thanks for playing with us ! We hope to see you back again soon. </p>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <h1 class=".modalTitle"> See you ! &#128075; </h1>
+            <p> Thanks for playing with us ! We hope to see you back again soon. </p>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </section>
     <!-- scripts -->
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
+  </body>
 </html>
